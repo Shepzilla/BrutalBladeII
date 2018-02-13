@@ -2,24 +2,28 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Brutal Blade II - Player Controller v0.01
+/// Brutal Blade II - Player Controller v0.03
 /// 
 /// About: Utilises animation controllers and IK to move around a character
 ///         and their arms in a combination of baked and procedural animation.
 ///         
 /// Author: Robert J Harper
-/// Last Update: 8/2/2018
+/// Last Update: 13/2/2018
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
     //Public Variables.
-    public float MovementDamping = 0.1f;        //Smooths stick input.
-    public float swingExtreme = 0.4f;          //Angle limit for sword movement.
+    public float movementDamping = 0.1f;        //Smooths stick input.
+    public float swordDamping = 0.2f;           //Smooths sword movement.
+    public float swingExtreme = 0.4f;           //Angle limit for sword movement.
     public Transform armParent;                 //Quick and easy way to move both arms and keep them in sync.
     public Transform opponent;                  //Reference to the position of the current target.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
     public Transform rightIkTarget = null;      //Where the right hand goes.
     public Transform leftIkTarget = null;       //Where the left hand goes.
+
+    private float horizontalSword = 0;
+    private float verticalSword = 0;
 
     Animator animator;
     Rigidbody rigidBody;
@@ -30,6 +34,10 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigidBody = GetComponent<Rigidbody>();
+
+        //Locks and hides the mouse cursor within the viewport.
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -38,14 +46,26 @@ public class PlayerController : MonoBehaviour
         //Reads input device for input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        /*
         float horizontalSword = Input.GetAxis("HorizontalSword");
         float verticalSword = Input.GetAxis("VerticalSword");
-        //bool fire = Input.GetButtonDown("Fire1");
+        */
+        horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword"), swordDamping * Time.deltaTime);
+        verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword"), swordDamping * Time.deltaTime);
+
+        //Clamps values of sword rotations to the specified extreme.
+        horizontalSword = Mathf.Clamp(horizontalSword, -swingExtreme, swingExtreme);
+        verticalSword = Mathf.Clamp(verticalSword, -swingExtreme, swingExtreme);
+
+        //Allows the editor game to be stopped (since the mouse in bound to the game screen.
+        if (Input.GetKey("escape"))
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
 
         //Applies input values to animator controller variables.
-        animator.SetFloat("ForwardBackward", vertical, MovementDamping, Time.deltaTime);
-        animator.SetFloat("LeftRight", horizontal, MovementDamping, Time.deltaTime);
-        //animator.SetBool("Fire", fire);
+        animator.SetFloat("ForwardBackward", vertical, movementDamping, Time.deltaTime);
+        animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
 
         //Applies input values to armParent to move the sword around the screen.
         armParent.localRotation = new Quaternion(verticalSword, horizontalSword, rigidBody.transform.rotation.z, rigidBody.transform.rotation.w);
@@ -55,17 +75,15 @@ public class PlayerController : MonoBehaviour
         rigidBody.transform.LookAt(opponentCoord);
     }
 
-    //Reference to Animator COntroller IK callback
+    //Reference to Animator Controller IK callback
     void OnAnimatorIK()
     {
         if (animator)
         {
-
             //if the IK is active, set the position and rotation directly to the goal. 
             if (ikActive)
             {
-
-                // Set the right hand target position and rotation, if one has been assigned
+                //Set the right hand target position and rotation, if it exists.
                 if (rightIkTarget != null)
                 {
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
@@ -73,8 +91,8 @@ public class PlayerController : MonoBehaviour
                     animator.SetIKPosition(AvatarIKGoal.RightHand, rightIkTarget.position);
                     animator.SetIKRotation(AvatarIKGoal.RightHand, rightIkTarget.rotation);
                 }
-
-                if (rightIkTarget != null)
+                //Set the left hand target position and rotation, if it exists.
+                if (leftIkTarget != null)
                 {
                     animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
                     animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
