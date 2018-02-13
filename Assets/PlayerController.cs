@@ -46,10 +46,7 @@ public class PlayerController : MonoBehaviour
         //Reads input device for input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        /*
-        float horizontalSword = Input.GetAxis("HorizontalSword");
-        float verticalSword = Input.GetAxis("VerticalSword");
-        */
+
         horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword"), swordDamping * Time.deltaTime);
         verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword"), swordDamping * Time.deltaTime);
 
@@ -68,7 +65,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
 
         //Applies input values to armParent to move the sword around the screen.
-        armParent.localRotation = new Quaternion(verticalSword, horizontalSword, rigidBody.transform.rotation.z, rigidBody.transform.rotation.w);
+        armParent.localRotation = new Quaternion(verticalSword, horizontalSword, transform.rotation.z, 1);//transform.rotation.w);
 
         //Gets the opponent's position and sets the y to zero to prevent undersired vertical rotations.
         opponentCoord = new Vector3(opponent.transform.position.x, 0, opponent.transform.position.z);
@@ -99,7 +96,6 @@ public class PlayerController : MonoBehaviour
                     animator.SetIKPosition(AvatarIKGoal.LeftHand, leftIkTarget.position);
                     animator.SetIKRotation(AvatarIKGoal.LeftHand, leftIkTarget.rotation);
                 }
-
             }
 
             //if the IK is not active, set the position and rotation of the hands back to the default positions.
@@ -113,13 +109,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    /*void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Enemy"))
         {
             animator.SetTrigger("Die");
         }
-    }
+    }*/
 }
 
 
