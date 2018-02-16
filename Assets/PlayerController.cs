@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float movementDamping = 0.1f;        //Smooths stick input.
     public float swordDamping = 0.2f;           //Smooths sword movement.
     public float swingExtreme = 0.4f;           //Angle limit for sword movement.
+    public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
     public Transform armParent;                 //Quick and easy way to move both arms and keep them in sync.
     public Transform opponent;                  //Reference to the position of the current target.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private float horizontalSword = 0;
     private float verticalSword = 0;
+    private float swordModifier = 0;
 
     Animator animator;
     Rigidbody rigidBody;
@@ -44,15 +46,19 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Reads input device for input
+        //Movement
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
+        //Sword movement (with interpolation)
         horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword"), swordDamping * Time.deltaTime);
         verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword"), swordDamping * Time.deltaTime);
+        swordModifier = Mathf.Lerp(swordModifier, Input.GetAxis("GripModifier"), swordDamping * Time.deltaTime);
 
         //Clamps values of sword rotations to the specified extreme.
         horizontalSword = Mathf.Clamp(horizontalSword, -swingExtreme, swingExtreme);
         verticalSword = Mathf.Clamp(verticalSword, -swingExtreme, swingExtreme);
+        swordModifier = Mathf.Clamp(swordModifier, -modifierExtreme, modifierExtreme);
 
         //Allows the editor game to be stopped (since the mouse in bound to the game screen.
         if (Input.GetKey("escape"))
@@ -65,7 +71,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
 
         //Applies input values to armParent to move the sword around the screen.
-        armParent.localRotation = new Quaternion(verticalSword, horizontalSword, transform.rotation.z, 1);//transform.rotation.w);
+        armParent.localRotation = new Quaternion(verticalSword, horizontalSword, swordModifier, 1);//transform.rotation.w);
 
         //Gets the opponent's position and sets the y to zero to prevent undersired vertical rotations.
         opponentCoord = new Vector3(opponent.transform.position.x, 0, opponent.transform.position.z);

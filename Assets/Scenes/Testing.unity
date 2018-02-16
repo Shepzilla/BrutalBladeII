@@ -160,6 +160,10 @@ Prefab:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: 2ab0893f5bba9b243b65e309e78089d0, type: 3}
+    - target: {fileID: 100104, guid: 2ab0893f5bba9b243b65e309e78089d0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ab0893f5bba9b243b65e309e78089d0, type: 3}
   m_IsPrefabParent: 0
@@ -757,6 +761,14 @@ Prefab:
     - target: {fileID: 400000, guid: 6fd08a4a73f10984c8b79faacb299b08, type: 3}
       propertyPath: m_LocalScale.x
       value: 49.813175
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6fd08a4a73f10984c8b79faacb299b08, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 6fd08a4a73f10984c8b79faacb299b08, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fd08a4a73f10984c8b79faacb299b08, type: 3}
@@ -1688,8 +1700,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementDamping: 0.1
-  swordDamping: 6
+  swordDamping: 8
   swingExtreme: 0.6
+  modifierExtreme: 0.9
   armParent: {fileID: 1578683181}
   opponent: {fileID: 1864339172}
   ikActive: 1
