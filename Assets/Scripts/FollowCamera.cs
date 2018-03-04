@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,11 +8,11 @@ public class FollowCamera : MonoBehaviour {
     public float smoothTime = 0.3F;
     public Vector3 offsetTransform;
     private Vector3 velocity = Vector3.zero;
-    public Transform enemyTarget;
+    Transform enemyTarget;
 
     void Start()
     {
-        //enemyTarget = target.
+        enemyTarget = target.opponent;
     }
 
     void Update()
