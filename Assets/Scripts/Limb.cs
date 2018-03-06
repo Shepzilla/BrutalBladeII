@@ -7,14 +7,19 @@ using UnityEngine;
 /// </summary>
 public class Limb : MonoBehaviour {
 
-    Collider collider;
-    ParticleSystem blood;
+    //Public Variables
     public bool isCritical;
+
+    //Private Variables
+    private Collider collider;
+    private ParticleSystem blood;
+    private PlayerHealth playerHealth;
 
 	// Use this for initialization
 	void Start () {
         collider = GetComponent<CapsuleCollider>();
         blood = GetComponent<ParticleSystem>();
+        playerHealth = GetComponentInParent<PlayerHealth>();
 	}
 	
 	// Update is called once per frame
@@ -22,12 +27,14 @@ public class Limb : MonoBehaviour {
 		
 	}
 
+    //Collision
     void OnTriggerEnter (Collider otherCol)
     {
+        //Makes sure it's a weapon
         if (otherCol.tag == "Weapon")
         {
-            print("oof");
             blood.Play();
+            playerHealth.TakeDamage(10);
         }
     }
 }

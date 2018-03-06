@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
 
-    public Limb[] limbs;
-    public PlayerController playerController;
+    public Transform spawnPoint;
     public int playerNum;
-    public int health;
+
 
     //public Transform spawnPoint;
 

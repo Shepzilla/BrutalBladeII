@@ -13,6 +13,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     //Public Variables.
+    public int playerNumber = 1;                //Stores player number for correct input.
     public float movementDamping = 0.1f;        //Smooths stick input.
     public float swordDamping = 0.2f;           //Smooths sword movement.
     public float swingExtreme = 0.4f;           //Angle limit for sword movement.
@@ -47,20 +48,20 @@ public class PlayerController : MonoBehaviour
     {
         //Reads input device for input
         //Movement
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxis("Horizontal" + playerNumber);
+        float vertical = Input.GetAxis("Vertical" + playerNumber);
 
         //Sword movement (with interpolation)
-        horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword"), swordDamping * Time.deltaTime);
-        verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword"), swordDamping * Time.deltaTime);
-        swordModifier = Mathf.Lerp(swordModifier, Input.GetAxis("GripModifier"), swordDamping * Time.deltaTime);
+        horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword" + playerNumber), swordDamping * Time.deltaTime);
+        verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword" + playerNumber), swordDamping * Time.deltaTime);
+        swordModifier = Mathf.Lerp(swordModifier, Input.GetAxis("GripModifier" + playerNumber), swordDamping * Time.deltaTime);
 
         //Clamps values of sword rotations to the specified extreme.
         horizontalSword = Mathf.Clamp(horizontalSword, -swingExtreme, swingExtreme);
         verticalSword = Mathf.Clamp(verticalSword, -swingExtreme, swingExtreme);
         swordModifier = Mathf.Clamp(swordModifier, -modifierExtreme, modifierExtreme);
 
-        //Allows the editor game to be stopped (since the mouse in bound to the game screen.
+        //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
         if (Input.GetKey("escape"))
         {
             UnityEditor.EditorApplication.isPlaying = false;
