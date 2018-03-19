@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour {
 
     //Public Variables
     public float startingHealth = 100;
+    public GameObject ragdoll;
 
     //Private Variables
     private float currentHealth;
@@ -43,6 +44,7 @@ public class PlayerHealth : MonoBehaviour {
     private void Die()
     {
         isDead = true;
+        Instantiate(ragdoll, gameObject.transform.position, gameObject.transform.rotation);
         gameObject.SetActive(false);
     }
 }

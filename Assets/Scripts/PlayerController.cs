@@ -27,11 +27,13 @@ public class PlayerController : MonoBehaviour
     private float horizontalSword = 0;
     private float verticalSword = 0;
     private float swordModifier = 0;
+    private PlayerHealth playerHealth;
 
     Animator animator;
     Rigidbody rigidBody;
     Vector3 opponentCoord;
-    
+    Quaternion chestTarget;
+
     // Use this for initialization
     void Start()
     {
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
         //Locks and hides the mouse cursor within the viewport.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     // Update is called once per frame
@@ -87,6 +90,12 @@ public class PlayerController : MonoBehaviour
             //if the IK is active, set the position and rotation directly to the goal. 
             if (ikActive)
             {
+
+                chestTarget.SetEulerRotation(armParent.localRotation.x, armParent.localRotation.y, Mathf.Clamp(armParent.localRotation.z, -0.3f, 0.3f));
+                animator.SetBoneLocalRotation(HumanBodyBones.Chest, chestTarget);
+
+                //animator.SetBoneLocalRotation(HumanBodyBones.Chest, new Quaternion(armParent.localRotation.x, armParent.localRotation.y, Mathf.Clamp(armParent.localRotation.z, -0.1f, 0.1f));//Quaternion.Slerp(transform.rotation, armParent.localRotation, Time.deltaTime));
+                
                 //Set the right hand target position and rotation, if it exists.
                 if (rightIkTarget != null)
                 {
@@ -123,6 +132,20 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Die");
         }
     }*/
+
+    //Detracts health from the playerHealth script and plays hit animation.
+    public void Hurt(int damage, bool critical)
+    {
+        if(critical)
+        {
+            playerHealth.TakeDamage(damage * 2);
+        }
+        else
+        {
+            playerHealth.TakeDamage(damage);
+        }
+        animator.SetTrigger("Hit");
+    }
 }
 
 

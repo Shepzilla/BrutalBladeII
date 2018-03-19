@@ -14,12 +14,14 @@ public class Limb : MonoBehaviour {
     private Collider collider;
     private ParticleSystem blood;
     private PlayerHealth playerHealth;
+    private PlayerController playerController;
+    private int baseDamage = 10;
 
 	// Use this for initialization
 	void Start () {
         collider = GetComponent<CapsuleCollider>();
         blood = GetComponent<ParticleSystem>();
-        playerHealth = GetComponentInParent<PlayerHealth>();
+        playerController = GetComponentInParent<PlayerController>();
 	}
 	
 	// Update is called once per frame
@@ -34,7 +36,7 @@ public class Limb : MonoBehaviour {
         if (otherCol.tag == "Weapon")
         {
             blood.Play();
-            playerHealth.TakeDamage(10);
+            playerController.Hurt(baseDamage, isCritical);
         }
     }
 }
