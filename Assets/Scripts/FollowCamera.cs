@@ -18,7 +18,7 @@ public class FollowCamera : MonoBehaviour {
     void Update()
     {
         Vector3 targetPosition = target.transform.TransformPoint(offsetTransform);
-        transform.LookAt(new Vector3 (enemyTarget.position.x, enemyTarget.position.y + 0.5F, enemyTarget.position.z));
+        transform.LookAt(new Vector3 (enemyTarget.position.x, enemyTarget.position.y + 1.0F, enemyTarget.position.z));
         //transform.rotation.SetLookRotation(enemyTarget.position);
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
