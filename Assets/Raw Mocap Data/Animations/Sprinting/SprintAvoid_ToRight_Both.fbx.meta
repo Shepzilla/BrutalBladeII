@@ -175,7 +175,12 @@ ModelImporter:
     optimizeGameObjects: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Errors found in
+      old project file will be treated as a warnings. Configuration mis-match will
+      be ignored, but current Configuration needs to be fixed:\n\tTransform 'Pivot'
+      not found in HumanDescription.\nCopied Avatar Rig Configuration mis-match. Bone
+      length in copied configuration does not match position in animation file:\n\t'LeftLeg'
+      : position error = 7.696520 mm\n\t'LeftFoot' : position error = 15.233778 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -191,8 +196,8 @@ ModelImporter:
     - serializedVersion: 16
       name: SprintAvoid_ToRight_Both
       takeName: _38_a_U1_M_P_SprintAvoid_ToRight_Both_Fb_p0_No_0_2
-      firstFrame: 240
-      lastFrame: 299
+      firstFrame: 256
+      lastFrame: 278
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -201,7 +206,7 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0

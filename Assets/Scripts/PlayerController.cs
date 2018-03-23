@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public float swordDamping = 0.2f;           //Smooths sword movement.
     public float swingExtreme = 0.4f;           //Angle limit for sword movement.
     public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
-    public Transform armParent;                 //Quick and easy way to move both arms and keep them in sync.
+    public GameObject armParent;                 //Quick and easy way to move both arms and keep them in sync.
     public Transform opponent;                  //Reference to the position of the current target.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
     public Transform rightIkTarget = null;      //Where the right hand goes.
@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private float verticalSword = 0;
     private float swordModifier = 0;
     private PlayerHealth playerHealth;
+    private Quaternion targetRotation;
 
     Animator animator;
     Rigidbody rigidBody;
@@ -47,12 +48,21 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
+    {
+        MoveCharacterAndSword();
+    }
+
+    void MoveCharacterAndSword()
     {
         //Reads input device for input
         //Movement
         float horizontal = Input.GetAxis("Horizontal" + playerNumber);
         float vertical = Input.GetAxis("Vertical" + playerNumber);
+
+        //Applies input values to animator controller variables.
+        animator.SetFloat("ForwardBackward", vertical, movementDamping, Time.deltaTime);
+        animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
 
         //Sword movement (with interpolation)
         horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword" + playerNumber), swordDamping * Time.deltaTime);
@@ -70,12 +80,9 @@ public class PlayerController : MonoBehaviour
             UnityEditor.EditorApplication.isPlaying = false;
         }
 
-        //Applies input values to animator controller variables.
-        animator.SetFloat("ForwardBackward", vertical, movementDamping, Time.deltaTime);
-        animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
-
         //Applies input values to armParent to move the sword around the screen.
-        armParent.localRotation = new Quaternion(verticalSword, horizontalSword, swordModifier, 1);//transform.rotation.w);
+        targetRotation = new Quaternion(verticalSword, horizontalSword, swordModifier, 1);//transform.rotation.w);
+        armParent.transform.localRotation = targetRotation;
 
         //Gets the opponent's position and sets the y to zero to prevent undersired vertical rotations.
         opponentCoord = new Vector3(opponent.transform.position.x, 0, opponent.transform.position.z);
@@ -90,8 +97,7 @@ public class PlayerController : MonoBehaviour
             //if the IK is active, set the position and rotation directly to the goal. 
             if (ikActive)
             {
-
-                chestTarget.SetEulerRotation(armParent.localRotation.x, armParent.localRotation.y, Mathf.Clamp(armParent.localRotation.z, -0.3f, 0.3f));
+                chestTarget.SetEulerRotation(armParent.transform.localRotation.x, armParent.transform.localRotation.y, Mathf.Clamp(armParent.transform.localRotation.z, -0.3f, 0.3f));
                 animator.SetBoneLocalRotation(HumanBodyBones.Chest, chestTarget);
 
                 //animator.SetBoneLocalRotation(HumanBodyBones.Chest, new Quaternion(armParent.localRotation.x, armParent.localRotation.y, Mathf.Clamp(armParent.localRotation.z, -0.1f, 0.1f));//Quaternion.Slerp(transform.rotation, armParent.localRotation, Time.deltaTime));
@@ -133,18 +139,25 @@ public class PlayerController : MonoBehaviour
         }
     }*/
 
+    //Makes the player react to sword collisions.
+    public void CollisionReact()
+    {
+        print("YEAH!");
+        targetRotation = new Quaternion(-horizontalSword, -verticalSword, -swordModifier, 1);
+    }
+
     //Detracts health from the playerHealth script and plays hit animation.
     public void Hurt(int damage, bool critical)
     {
         if(critical)
         {
             playerHealth.TakeDamage(damage * 2);
+            animator.SetTrigger("Hit");
         }
         else
         {
             playerHealth.TakeDamage(damage);
         }
-        animator.SetTrigger("Hit");
     }
 }
 

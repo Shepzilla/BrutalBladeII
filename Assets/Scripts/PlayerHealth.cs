@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour {
 
     //Public Variables
     public float startingHealth = 100;
     public GameObject ragdoll;
+    public Slider healthBar;
 
     //Private Variables
     private float currentHealth;
@@ -34,6 +36,7 @@ public class PlayerHealth : MonoBehaviour {
         currentHealth -= damage;
         print(currentHealth.ToString());
         //If the health drops below 0, the player is dead.
+        healthBar.value = currentHealth;
         if (currentHealth <= 0 && !isDead)
         {
             Die();
