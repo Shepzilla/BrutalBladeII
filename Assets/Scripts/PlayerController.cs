@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
     public Transform rightIkTarget = null;      //Where the right hand goes.
     public Transform leftIkTarget = null;       //Where the left hand goes.
+    public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
 
+    //Private Variables.
     private float horizontalSword = 0;
     private float verticalSword = 0;
     private float swordModifier = 0;
@@ -149,6 +151,7 @@ public class PlayerController : MonoBehaviour
     //Detracts health from the playerHealth script and plays hit animation.
     public void Hurt(int damage, bool critical)
     {
+        //If the limb is a critical limb, it will deal more damage.
         if(critical)
         {
             playerHealth.TakeDamage(damage * 2);
