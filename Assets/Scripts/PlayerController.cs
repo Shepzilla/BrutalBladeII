@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            MoveCharacterAndSword();
+            PhysicsMoveCharacterAndSword();
         }
     }
 
@@ -145,6 +145,42 @@ public class PlayerController : MonoBehaviour
         rigidBody.transform.LookAt(opponentCoord);
     }
 
+    void PhysicsMoveCharacterAndSword()
+    {
+         //Reads input device for input
+        //Movement
+        float horizontal = Input.GetAxis("Horizontal" + playerNumber);
+        float vertical = Input.GetAxis("Vertical" + playerNumber);
+
+        //Applies input values to animator controller variables.
+        animator.SetFloat("ForwardBackward", vertical, movementDamping, Time.deltaTime);
+        animator.SetFloat("LeftRight", horizontal, movementDamping, Time.deltaTime);
+
+        //Sword movement (with interpolation)
+        horizontalSword = Mathf.Lerp(horizontalSword, Input.GetAxis("HorizontalSword" + playerNumber), legacySwordDamping * Time.deltaTime);
+        verticalSword = Mathf.Lerp(verticalSword, Input.GetAxis("VerticalSword" + playerNumber), legacySwordDamping * Time.deltaTime);
+        swordModifier = Mathf.Lerp(swordModifier, Input.GetAxis("GripModifier" + playerNumber), legacySwordDamping * Time.deltaTime);
+
+        //Clamps values of sword rotations to the specified extreme.
+        horizontalSword = Mathf.Clamp(horizontalSword, -swingExtreme, swingExtreme);
+        verticalSword = Mathf.Clamp(verticalSword, -swingExtreme, swingExtreme);
+        swordModifier = Mathf.Clamp(swordModifier, -modifierExtreme, modifierExtreme);
+
+        //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
+        if (Input.GetKey("escape"))
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
+
+        //Applies input values to armParent to move the sword around the screen.
+        targetRotation = new Quaternion(verticalSword, horizontalSword, swordModifier, 1);//transform.rotation.w);
+        armParent.GetComponent<Rigidbody>().AddRelativeTorque(verticalSword, horizontalSword, swordModifier, ForceMode.Acceleration);
+
+        //Gets the opponent's position and sets the y to zero to prevent undersired vertical rotations.
+        opponentCoord = new Vector3(opponent.transform.position.x, 0, opponent.transform.position.z);
+        rigidBody.transform.LookAt(opponentCoord);
+    }
+
     //Reference to Animator Controller IK callback
     void OnAnimatorIK()
     {
@@ -198,10 +234,10 @@ public class PlayerController : MonoBehaviour
     //Makes the player react to sword collisions.
     public void CollisionReact()
     {
-        print("YEAH!");
+        //print("YEAH!");
         targetRotation = new Quaternion(-horizontalSword, -verticalSword, -swordModifier, 1);
     }
-
+    
     //Detracts health from the playerHealth script and plays hit animation.
     public void Hurt(int damage, bool critical)
     {
