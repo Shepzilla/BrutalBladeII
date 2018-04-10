@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        print(currentHealth.ToString());
+
         //If the health drops below 0, the player is dead.
         healthBar.value = currentHealth;
         if (currentHealth <= 0 && !isDead)

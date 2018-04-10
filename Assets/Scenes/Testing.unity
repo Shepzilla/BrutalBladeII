@@ -1064,6 +1064,16 @@ Prefab:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+        type: 2}
+      propertyPath: legacyMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54360579630066930, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b2374220c5197f40aaa238c3d4c45ab, type: 2}
   m_IsPrefabParent: 0

@@ -31,6 +31,14 @@ public class Sword : MonoBehaviour {
 	void Update () {
 	}
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Weapon")
+        {
+            playerController.CollisionReact();
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         print(collision.gameObject);
