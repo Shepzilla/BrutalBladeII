@@ -1014,22 +1014,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 223047632062269790, guid: 7b2374220c5197f40aaa238c3d4c45ab,
-        type: 2}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 320771447}
-    - target: {fileID: 198735411818915842, guid: 7b2374220c5197f40aaa238c3d4c45ab,
-        type: 2}
-      propertyPath: CollisionModule.plane0
-      value: 
-      objectReference: {fileID: 1994671150}
-    - target: {fileID: 198859806536774822, guid: 7b2374220c5197f40aaa238c3d4c45ab,
-        type: 2}
-      propertyPath: CollisionModule.plane0
-      value: 
-      objectReference: {fileID: 1994671150}
-    - target: {fileID: 198555862117723064, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+    - target: {fileID: 198326852220438966, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: CollisionModule.plane0
       value: 
@@ -1039,11 +1024,26 @@ Prefab:
       propertyPath: CollisionModule.plane0
       value: 
       objectReference: {fileID: 1994671150}
-    - target: {fileID: 198326852220438966, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+    - target: {fileID: 198555862117723064, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: CollisionModule.plane0
       value: 
       objectReference: {fileID: 1994671150}
+    - target: {fileID: 198859806536774822, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+        type: 2}
+      propertyPath: CollisionModule.plane0
+      value: 
+      objectReference: {fileID: 1994671150}
+    - target: {fileID: 198735411818915842, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+        type: 2}
+      propertyPath: CollisionModule.plane0
+      value: 
+      objectReference: {fileID: 1994671150}
+    - target: {fileID: 223047632062269790, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+        type: 2}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 320771447}
     - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: opponent
@@ -1059,20 +1059,20 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+    - target: {fileID: 54043965097760802, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
-      propertyPath: legacyMovement
+      propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
-      propertyPath: swingSpeed
-      value: 40
+      propertyPath: legacyMovement
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
+    - target: {fileID: 54360579630066930, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
-      propertyPath: legacySwordDamping
-      value: 5
+      propertyPath: m_Constraints
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b2374220c5197f40aaa238c3d4c45ab, type: 2}

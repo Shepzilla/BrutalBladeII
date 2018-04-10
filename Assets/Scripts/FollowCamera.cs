@@ -23,12 +23,6 @@ public class FollowCamera : MonoBehaviour {
         enemyTarget = followTarget.opponent;
         weapon = followTarget.GetComponentInChildren<Rigidbody>().transform;
         ppProfile = GetComponent<PostProcessingBehaviour>().profile;
-
-        //Test findings.
-        if (weapon != null)
-        {
-            print("gateem");
-        }
     }
 
     //FixedUpdate here because these things shouldn't be tied to framerate.
