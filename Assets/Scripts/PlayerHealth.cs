@@ -14,21 +14,11 @@ public class PlayerHealth : MonoBehaviour {
     private float currentHealth;
     private bool isDead;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-
     private void OnEnable()
     {
         currentHealth = startingHealth;
         isDead = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     //To be called by limb colliders upon impact.
     public void TakeDamage(float damage)

@@ -9,15 +9,6 @@ public class Sword : MonoBehaviour {
     Rigidbody rigidBody;
     Transform startPos;
 
-    ///
-    /// WHAT YOU NEED TO DO
-    /// - Get the sword bound to the targetParent right hand.
-    /// - Get the hands bound to the sword.
-    /// - Interp rotation to targetRotation following collision.
-    /// - Adjust torque values to get the swing right.
-    /// - Figure out a way to get claming to work (negative forces that are multiplied as the sword moves further away? (Would that cause a slingshot effect?))
-    /// Side note. This may be the solution to our problems.
-    ///
 	// Use this for initialization
 	void Start () {
         boxCollider = GetComponent<BoxCollider>();
@@ -31,21 +22,23 @@ public class Sword : MonoBehaviour {
 	void Update () {
 	}
 
+    //Detects overlap with other sword and passes through the other sword's velocity
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Weapon")
         {
-            playerController.CollisionReact();
+            playerController.CollisionReact(other.GetComponentInParent<PlayerController>().armParent.GetComponent<Rigidbody>().angularVelocity);
         }
     }
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.gameObject);
+        print(rigidBody.angularVelocity);
         playerController.CollisionReact();
         rigidBody.isKinematic = false;
     }
-    
+    */
     private void OnCollisionExit(Collision collision)
     {
         rigidBody.isKinematic = true;

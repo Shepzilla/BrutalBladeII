@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Brutal Blade II - Player Controller v0.1
+/// Brutal Blade II - Player Controller v0.2
 /// 
-/// About: Utilises animation controllers and IK to move around a character
-///         and their arms in a combination of baked and procedural animation.
+/// About: Utilises animation controllers, physics forces and inverse kinematics to move a character
+///        and their arms in a combination of baked and physics-driven animation.
 ///         
 /// Author: Robert J Harper
-/// Last Update: 9/4/2018
+/// Last Update: 10/4/2018
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
@@ -16,17 +16,20 @@ public class PlayerController : MonoBehaviour
     public int playerNumber = 1;                //Stores player number for correct input.
     public float movementDamping = 0.1f;        //Smooths stick input.
     public float swingMultiplier = 5.0f;        //How fast can the player swing their sword?
-    public float legacySwordDamping = 0.2f;     //Smooths sword movement. (Legacy)
-    public float swingExtreme = 0.4f;           //Angle limit for sword movement.
+    public float legacySwordDamping = 0.2f;     //(LEGACY)Smooths sword movement.
+    public float legacySwingExtreme = 0.4f;     //(LEGACY)Angle limit for sword movement.
+    public float swingExtreme = 200.0f;         //Angle limit for sword movement.
     public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
     public float recoilMultiplier = 10.0f;      //The force multiplier exerted on sword collisions.
     public GameObject armParent;                //Quick and easy way to move both arms and keep them in sync.
     public Transform opponent;                  //Reference to the position of the current target.
     public Transform rightIkTarget = null;      //Where the right hand goes.
     public Transform leftIkTarget = null;       //Where the left hand goes.
+    public ParticleSystem clashParticles;       //Particles to play when swords collide.
     public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
     public bool legacyMovement = false;         //Toggles between using linear interpolation or smoothDamp.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
+    public GameObject sword;
 
     //Private Variables.
     private float horizontalSword = 0;          //The value of armParent rotation across the horizontal axis.
@@ -42,6 +45,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody rigidBody;
     Vector3 opponentCoord;
     Quaternion chestTarget;
+
     // Use this for initialization
     void Start()
     {
@@ -100,8 +104,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void PhysicsMoveSword()
     {
-        horizontalSword = Mathf.Clamp(Input.GetAxis("HorizontalSword" + playerNumber), -swingExtreme, swingExtreme);
-        verticalSword = Mathf.Clamp(Input.GetAxis("VerticalSword" + playerNumber), -swingExtreme, swingExtreme);
+        //Reads the right stick.
+        horizontalSword = Mathf.Clamp(Input.GetAxis("HorizontalSword" + playerNumber), -legacySwingExtreme, legacySwingExtreme);
+        verticalSword = Mathf.Clamp(Input.GetAxis("VerticalSword" + playerNumber), -legacySwingExtreme, legacySwingExtreme);
+
+        //Reads the triggers (both triggers affect the same floating point value, with left being -1 and right being 1).
         swordModifier = Mathf.Clamp(Input.GetAxis("GripModifier" + playerNumber), -modifierExtreme, modifierExtreme);
 
         //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
@@ -124,7 +131,7 @@ public class PlayerController : MonoBehaviour
         Quaternion currentRotation = armParent.transform.localRotation;
 
         //Finds the direction to move the armParent back towards its origin and multiplies the result by the size of the angle between the two quaternions.
-        Vector3 resetForce = new Vector3(currentRotation.x - originRotation.x, currentRotation.y - originRotation.y, currentRotation.z - originRotation.z) * Mathf.Clamp(Quaternion.Angle(currentRotation, targetRotation), -100.0f, 100.0f);
+        Vector3 resetForce = new Vector3(currentRotation.x - originRotation.x, currentRotation.y - originRotation.y, currentRotation.z - originRotation.z) * Mathf.Clamp(Quaternion.Angle(currentRotation, targetRotation), -swingExtreme, swingExtreme);
         //print(resetForce.ToString());
 
         //Applies the calculated torque to the armParent.
@@ -144,8 +151,8 @@ public class PlayerController : MonoBehaviour
         swordModifier = Mathf.Lerp(swordModifier, Input.GetAxis("GripModifier" + playerNumber), legacySwordDamping * Time.deltaTime);
 
         //Clamps values of sword rotations to the specified extreme.
-        horizontalSword = Mathf.Clamp(horizontalSword, -swingExtreme, swingExtreme);
-        verticalSword = Mathf.Clamp(verticalSword, -swingExtreme, swingExtreme);
+        horizontalSword = Mathf.Clamp(horizontalSword, -legacySwingExtreme, legacySwingExtreme);
+        verticalSword = Mathf.Clamp(verticalSword, -legacySwingExtreme, legacySwingExtreme);
         swordModifier = Mathf.Clamp(swordModifier, -modifierExtreme, modifierExtreme);
 
         //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
@@ -199,42 +206,44 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*void OnCollisionEnter(Collision col)
+    void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Enemy"))
         {
             animator.SetTrigger("Die");
         }
-    }*/
+    }
 
     //Makes the player react to sword collisions.
-    public void CollisionReact()
+    public void CollisionReact(Vector3 opposingForce)
     {
-        print("YEAH!");
-        //targetRotation = new Quaternion(-horizontalSword, -verticalSword, -swordModifier, 1);
-
         //Gets the current angular velocity of the armParent.
         Vector3 currentForce = armParent.GetComponent<Rigidbody>().angularVelocity;
 
         //Applies a multiplied force in the opposing direction, giving the illusion of collision detection.
-        armParent.GetComponent<Rigidbody>().AddRelativeTorque(currentForce * -recoilMultiplier, ForceMode.VelocityChange);
+        armParent.GetComponent<Rigidbody>().AddRelativeTorque(((currentForce * -1) - opposingForce) * recoilMultiplier, ForceMode.VelocityChange);
+
+        //Play particle system.
+        clashParticles.Play();
     }
     
     //Detracts health from the playerHealth script and plays hit animation.
-    public void Hurt(int damage, bool critical)
+    public void Hurt(float damage, bool critical)
     {
-        /*
+        
         //If the limb is a critical limb, it will deal more damage.
         if(critical)
         {
             playerHealth.TakeDamage(damage * 2);
+
+            if (animator)
             animator.SetTrigger("Hit");
         }
         else
         {
             playerHealth.TakeDamage(damage);
         }
-        */
+        
     }
 }
 
