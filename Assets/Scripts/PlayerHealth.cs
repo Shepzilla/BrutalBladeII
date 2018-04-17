@@ -13,6 +13,12 @@ public class PlayerHealth : MonoBehaviour {
     //Private Variables
     private float currentHealth;
     private bool isDead;
+    private AudioSource cutSound;
+
+    void Start()
+    {
+        cutSound = GetComponent<AudioSource>();
+    }
 
     private void OnEnable()
     {
@@ -24,7 +30,7 @@ public class PlayerHealth : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-
+        cutSound.Play();
         //If the health drops below 0, the player is dead.
         healthBar.value = currentHealth;
         if (currentHealth <= 0 && !isDead)

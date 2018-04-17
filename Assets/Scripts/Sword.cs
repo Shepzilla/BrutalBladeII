@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour {
     PlayerController playerController;
     Rigidbody rigidBody;
     Transform startPos;
+    AudioSource clashSound;
 
 	// Use this for initialization
 	void Start () {
@@ -15,6 +16,8 @@ public class Sword : MonoBehaviour {
         playerController = GetComponentInParent<PlayerController>();
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.angularVelocity = new Vector3(0, 0, 0);
+        clashSound = GetComponent<AudioSource>();
+        //print(clashSound.clip.ToString());
         startPos = transform;
 	}
 	
@@ -27,6 +30,8 @@ public class Sword : MonoBehaviour {
     {
         if (other.gameObject.tag == "Weapon")
         {
+            clashSound.pitch = Random.Range(0.8f, 1.2f);
+            clashSound.Play();
             playerController.CollisionReact(other.GetComponentInParent<PlayerController>().armParent.GetComponent<Rigidbody>().angularVelocity);
         }
     }
@@ -38,9 +43,10 @@ public class Sword : MonoBehaviour {
         playerController.CollisionReact();
         rigidBody.isKinematic = false;
     }
-    */
+    
     private void OnCollisionExit(Collision collision)
     {
         rigidBody.isKinematic = true;
     }
+    */
 }
