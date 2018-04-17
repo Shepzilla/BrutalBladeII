@@ -15,7 +15,7 @@ public class Limb : MonoBehaviour {
     private ParticleSystem blood;
     private PlayerHealth playerHealth;
     private PlayerController playerController;
-    private float baseDamage = 20.0f;
+    private float baseDamage = 10.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +37,7 @@ public class Limb : MonoBehaviour {
         {
             blood.Play();
             playerController.Hurt(baseDamage * playerController.armParent.GetComponent<Rigidbody>().angularVelocity.magnitude, isCritical);
-            print(playerController.armParent.GetComponent<Rigidbody>().angularVelocity.magnitude);
+            print(baseDamage * playerController.armParent.GetComponent<Rigidbody>().angularVelocity.magnitude);
         }
     }
 }

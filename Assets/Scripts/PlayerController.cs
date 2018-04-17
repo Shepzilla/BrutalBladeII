@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     public Transform opponent;                  //Reference to the position of the current target.
     public Transform rightIkTarget = null;      //Where the right hand goes.
     public Transform leftIkTarget = null;       //Where the left hand goes.
+    public ParticleSystem leftFootParticles;    //Particles for the left foot.
+    public ParticleSystem rightFootParticles;   //Particles for the right foot.
     public ParticleSystem clashParticles;       //Particles to play when swords collide.
     public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
     public bool legacyMovement = false;         //Toggles between using linear interpolation or smoothDamp.
@@ -205,7 +207,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    /*
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Enemy"))
@@ -213,7 +215,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Die");
         }
     }
-
+    */
     //Makes the player react to sword collisions.
     public void CollisionReact(Vector3 opposingForce)
     {
@@ -244,6 +246,16 @@ public class PlayerController : MonoBehaviour
             playerHealth.TakeDamage(damage);
         }
         
+    }
+
+    public void Footstep(string foot)
+    {
+        print(foot);
+
+        if (foot == "left")
+            leftFootParticles.Play();
+        else
+            rightFootParticles.Play();
     }
 }
 

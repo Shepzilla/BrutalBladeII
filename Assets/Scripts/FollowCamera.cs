@@ -21,8 +21,9 @@ public class FollowCamera : MonoBehaviour {
     void Start()
     {
         enemyTarget = followTarget.opponent;
-        weapon = followTarget.GetComponentInChildren<Rigidbody>().transform;
+        weapon = followTarget.GetComponentInChildren<Sword>().transform;
         ppProfile = GetComponent<PostProcessingBehaviour>().profile;
+        print(weapon.gameObject.name.ToString());
     }
 
     //FixedUpdate here because these things shouldn't be tied to framerate.
@@ -36,7 +37,7 @@ public class FollowCamera : MonoBehaviour {
     void MoveCamera()
     {
         //Calculate desired position.
-        Vector3 targetPosition = (followTarget.transform.TransformPoint(offsetTransform) + weapon.transform.TransformPoint(offsetTransform))/ 2;
+        Vector3 targetPosition = followTarget.transform.TransformPoint(offsetTransform);// + weapon.transform.TransformPoint(offsetTransform)) / 2;
         transform.LookAt(new Vector3(enemyTarget.position.x, enemyTarget.position.y + 1.0F, enemyTarget.position.z));
 
         //Apply results
