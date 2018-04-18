@@ -175,7 +175,12 @@ ModelImporter:
     optimizeGameObjects: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Errors found in
+      old project file will be treated as a warnings. Configuration mis-match will
+      be ignored, but current Configuration needs to be fixed:\n\tTransform 'Pivot'
+      not found in HumanDescription.\nCopied Avatar Rig Configuration mis-match. Bone
+      length in copied configuration does not match position in animation file:\n\t'LeftLeg'
+      : position error = 7.696520 mm\n\t'LeftFoot' : position error = 15.233778 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -211,7 +216,71 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.009708739
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.34563106
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.43883497
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.48712134
+        functionName: Footstep
+        data: Right
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.49740034
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7868284
+        functionName: Footstep
+        data: Right
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.79549396
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.94974005
+        functionName: Footstep
+        data: Left
+        objectReferenceParameter: {fileID: 11500000, guid: b100107aa0c825244be69defb6c50a14,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

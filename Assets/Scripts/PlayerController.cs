@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Brutal Blade II - Player Controller v0.2
+/// Brutal Blade II - Player Controller v0.21
 /// 
 /// About: Utilises animation controllers, physics forces and inverse kinematics to move a character
 ///        and their arms in a combination of baked and physics-driven animation.
 ///         
 /// Author: Robert J Harper
-/// Last Update: 10/4/2018
+/// Last Update: 18/4/2018
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
@@ -21,17 +21,19 @@ public class PlayerController : MonoBehaviour
     public float swingExtreme = 200.0f;         //Angle limit for sword movement.
     public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
     public float recoilMultiplier = 10.0f;      //The force multiplier exerted on sword collisions.
+    public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
     public GameObject armParent;                //Quick and easy way to move both arms and keep them in sync.
+    public GameObject sword;                    //Reference to the sword the player is holding.
     public Transform opponent;                  //Reference to the position of the current target.
     public Transform rightIkTarget = null;      //Where the right hand goes.
     public Transform leftIkTarget = null;       //Where the left hand goes.
     public ParticleSystem leftFootParticles;    //Particles for the left foot.
     public ParticleSystem rightFootParticles;   //Particles for the right foot.
     public ParticleSystem clashParticles;       //Particles to play when swords collide.
-    public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
+    public AudioSource footStepSourceL;         //The sound to play when a footstep is executed. (Left)
+    public AudioSource footStepSourceR;         //The sound to play when a footstep is executed. (Right)
     public bool legacyMovement = false;         //Toggles between using linear interpolation or smoothDamp.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
-    public GameObject sword;
 
     //Private Variables.
     private float horizontalSword = 0;          //The value of armParent rotation across the horizontal axis.
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private Quaternion targetRotation;          //(LEGACY) The rotation to move the armParent towards.
     private Quaternion originRotation;          //The rotation to reset the armParent to.
 
+    //Misc Variables.
     Animator animator;
     Rigidbody rigidBody;
     Vector3 opponentCoord;
@@ -67,7 +70,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         MoveCharacter();
-        
+        EscapeGame();
         //Toggles between different sword control methods. 
         if(legacyMovement)
         {
@@ -113,12 +116,6 @@ public class PlayerController : MonoBehaviour
         //Reads the triggers (both triggers affect the same floating point value, with left being -1 and right being 1).
         swordModifier = Mathf.Clamp(Input.GetAxis("GripModifier" + playerNumber), -modifierExtreme, modifierExtreme);
 
-        //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
-        if (Input.GetKey("escape"))
-        {
-            UnityEditor.EditorApplication.isPlaying = false;
-        }
-
         //Applies input values to armParent to move the sword around the screen.
         armParent.GetComponent<Rigidbody>().AddRelativeTorque(verticalSword * swingMultiplier, horizontalSword * swingMultiplier, swordModifier * swingMultiplier, ForceMode.Acceleration);
     }
@@ -134,7 +131,6 @@ public class PlayerController : MonoBehaviour
 
         //Finds the direction to move the armParent back towards its origin and multiplies the result by the size of the angle between the two quaternions.
         Vector3 resetForce = new Vector3(currentRotation.x - originRotation.x, currentRotation.y - originRotation.y, currentRotation.z - originRotation.z) * Mathf.Clamp(Quaternion.Angle(currentRotation, targetRotation), -swingExtreme, swingExtreme);
-        //print(resetForce.ToString());
 
         //Applies the calculated torque to the armParent.
         armParent.GetComponent<Rigidbody>().AddRelativeTorque(resetForce, ForceMode.Acceleration);
@@ -142,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// This is the legacy version of sword control.
-    /// It calculates a target rotation based on the gamepad's right stick and moves to sword
+    /// It calculates a target rotation based on the gamepad's right stick and moves the sword
     /// towards the targetRotation via linear interpolation.
     /// </summary>
     void LegacyMoveSword()
@@ -156,12 +152,6 @@ public class PlayerController : MonoBehaviour
         horizontalSword = Mathf.Clamp(horizontalSword, -legacySwingExtreme, legacySwingExtreme);
         verticalSword = Mathf.Clamp(verticalSword, -legacySwingExtreme, legacySwingExtreme);
         swordModifier = Mathf.Clamp(swordModifier, -modifierExtreme, modifierExtreme);
-
-        //Allows the editor game to be stopped (since the mouse in bound to the game screen.)
-        if (Input.GetKey("escape"))
-        {
-            UnityEditor.EditorApplication.isPlaying = false;
-        }
 
         //Applies input values to armParent to move the sword around the screen.
         targetRotation = new Quaternion(verticalSword, horizontalSword, swordModifier, 1);//transform.rotation.w);
@@ -196,7 +186,6 @@ public class PlayerController : MonoBehaviour
                     animator.SetIKRotation(AvatarIKGoal.LeftHand, leftIkTarget.rotation);
                 }
             }
-
             //if the IK is not active, set the position and rotation of the hands back to the default positions.
             else
             {
@@ -207,16 +196,17 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    /*
-    void OnCollisionEnter(Collision col)
+
+    //Allows the editor game to be stopped with the escape key.
+    void EscapeGame()
     {
-        if (col.gameObject.CompareTag("Enemy"))
+        if (Input.GetKey("escape"))
         {
-            animator.SetTrigger("Die");
+            UnityEditor.EditorApplication.isPlaying = false;
         }
     }
-    */
-    //Makes the player react to sword collisions.
+
+    //Makes the armParent to react to sword collisions.
     public void CollisionReact(Vector3 opposingForce)
     {
         //Gets the current angular velocity of the armParent.
@@ -241,6 +231,7 @@ public class PlayerController : MonoBehaviour
             if (animator)
             animator.SetTrigger("Hit");
         }
+        //Otherwise, don't multiply the damage.
         else
         {
             playerHealth.TakeDamage(damage);
@@ -248,14 +239,22 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    //This gets fired from events in the character animations whenever a footstep occurs.
     public void Footstep(string foot)
     {
-        print(foot);
-
+        //With the string passed from the animation event, decide which foot to trigger.
         if (foot == "left")
+        {
+            footStepSourceL.pitch = Random.Range(0.8f, 1.2f);
+            footStepSourceL.Play();
             leftFootParticles.Play();
+        }
         else
+        {
+            footStepSourceR.pitch = Random.Range(0.8f, 1.2f);
+            footStepSourceR.Play();
             rightFootParticles.Play();
+        }
     }
 }
 
