@@ -39,10 +39,16 @@ public class PlayerHealth : MonoBehaviour {
         }
     }
 
+    public float getHealth()
+    {
+        return currentHealth;
+    }
+
     //Called upon player death.
     private void Die()
     {
         isDead = true;
+        cutSound.Play();
         Instantiate(ragdoll, gameObject.transform.position, gameObject.transform.rotation);
         gameObject.SetActive(false);
     }

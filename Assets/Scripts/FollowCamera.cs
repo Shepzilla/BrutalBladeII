@@ -31,6 +31,7 @@ public class FollowCamera : MonoBehaviour {
     {
         MoveCamera();
         AdaptiveDepthOfField();
+        HurtFX();
     }
 
     //Interpolates the camera relative to the offset from the player's current position while rotating to face the enemy.
@@ -48,10 +49,23 @@ public class FollowCamera : MonoBehaviour {
     void AdaptiveDepthOfField()
     {
         //Gets the current depth of field settings and then gets the distance between the camera and the player's enemy.
-        DepthOfFieldModel.Settings dofFocus = ppProfile.depthOfField.settings;
-        dofFocus.focusDistance = ((transform.position - enemyTarget.position).magnitude);
+        DepthOfFieldModel.Settings ppdDof = ppProfile.depthOfField.settings;
+        ppdDof.focusDistance = ((transform.position - enemyTarget.position).magnitude);
 
         //Sets focus distance to distance calculated.
-        ppProfile.depthOfField.settings = dofFocus;
+        ppProfile.depthOfField.settings = ppdDof;
+    }
+
+    //Post processing tweaks to emphasise player damage.
+    void HurtFX()
+    {
+        //Gets the current chromatic aberration settings.
+        ChromaticAberrationModel.Settings ppChromatic = ppProfile.chromaticAberration.settings;
+
+        //Calculates a new intensity depending on player damage.
+        ppChromatic.intensity = Mathf.Clamp((followTarget.GetComponent<PlayerHealth>().startingHealth - followTarget.GetComponent<PlayerHealth>().getHealth()) / 50, 0, 2);
+
+        //Applies new intensity.
+        ppProfile.chromaticAberration.settings = ppChromatic;
     }
 }

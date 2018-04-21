@@ -61,8 +61,8 @@ public class PlayerController : MonoBehaviour
         originRotation = armParent.transform.localRotation;
 
         //Locks and hides the mouse cursor within the viewport.
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         playerHealth = GetComponent<PlayerHealth>();
     }
     
@@ -243,7 +243,7 @@ public class PlayerController : MonoBehaviour
     public void Footstep(string foot)
     {
         //With the string passed from the animation event, decide which foot to trigger.
-        if (foot == "left")
+        if (foot == "Left")
         {
             footStepSourceL.pitch = Random.Range(0.8f, 1.2f);
             footStepSourceL.Play();
