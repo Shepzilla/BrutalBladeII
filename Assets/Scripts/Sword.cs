@@ -37,6 +37,17 @@ public class Sword : MonoBehaviour {
     }
 
     /*
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Weapon")
+        {
+            clashSound.pitch = Random.Range(0.8f, 1.2f);
+            clashSound.Play();
+            playerController.CollisionReact(other.GetComponentInParent<PlayerController>().armParent.GetComponent<Rigidbody>().angularVelocity * 4);
+        }
+    }
+    
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         print(rigidBody.angularVelocity);

@@ -15,7 +15,7 @@ public class Limb : MonoBehaviour {
     private ParticleSystem blood;
     private PlayerHealth playerHealth;
     private PlayerController playerController;
-    private float baseDamage = 10.0f;
+    private float baseDamage = 2.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -36,8 +36,8 @@ public class Limb : MonoBehaviour {
         if (otherCol.tag == "Weapon" && otherCol.gameObject != playerController.sword)
         {
             blood.Play();
-            playerController.Hurt(baseDamage * playerController.armParent.GetComponent<Rigidbody>().angularVelocity.magnitude, isCritical);
-            print(baseDamage * playerController.armParent.GetComponent<Rigidbody>().angularVelocity.magnitude);
+            playerController.Hurt(baseDamage * otherCol.GetComponentInParent<PlayerController>().armParent.GetComponent<Rigidbody>().angularVelocity.magnitude, isCritical);
+            print(baseDamage * otherCol.GetComponentInParent<PlayerController>().armParent.GetComponent<Rigidbody>().angularVelocity.magnitude);
         }
     }
 }

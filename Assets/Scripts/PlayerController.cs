@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public float swingExtreme = 200.0f;         //Angle limit for sword movement.
     public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
     public float recoilMultiplier = 10.0f;      //The force multiplier exerted on sword collisions.
-    public int criticalMultiplier = 2;          //How much extra damage is taken when a critical limb is hit.
+    public float criticalMultiplier = 1.4f;     //How much extra damage is taken when a critical limb is hit.
     public GameObject armParent;                //Quick and easy way to move both arms and keep them in sync.
     public GameObject sword;                    //Reference to the sword the player is holding.
     public Transform opponent;                  //Reference to the position of the current target.
@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey("escape"))
         {
-            UnityEditor.EditorApplication.isPlaying = false;
+            //UnityEditor.EditorApplication.isPlaying = false;
         }
     }
 

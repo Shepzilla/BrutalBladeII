@@ -23,7 +23,6 @@ public class FollowCamera : MonoBehaviour {
         enemyTarget = followTarget.opponent;
         weapon = followTarget.GetComponentInChildren<Sword>().transform;
         ppProfile = GetComponent<PostProcessingBehaviour>().profile;
-        print(weapon.gameObject.name.ToString());
     }
 
     //FixedUpdate here because these things shouldn't be tied to framerate.

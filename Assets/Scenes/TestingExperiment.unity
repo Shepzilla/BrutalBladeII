@@ -348,12 +348,12 @@ Prefab:
     - target: {fileID: 224459861644228326, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224459861644228326, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b2374220c5197f40aaa238c3d4c45ab, type: 2}
@@ -2060,15 +2060,6 @@ Prefab:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 4298385211868774, guid: 7b2374220c5197f40aaa238c3d4c45ab, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -180.20299
-      objectReference: {fileID: 0}
-    - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
-        type: 2}
-      propertyPath: playerNumber
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 114925248026964372, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: opponent
@@ -2077,17 +2068,12 @@ Prefab:
     - target: {fileID: 224459861644228326, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224459861644228326, guid: 7b2374220c5197f40aaa238c3d4c45ab,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114456190079898436, guid: 7b2374220c5197f40aaa238c3d4c45ab,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b2374220c5197f40aaa238c3d4c45ab, type: 2}
@@ -2196,7 +2182,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1759708985}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.285793, y: 5.33, z: -3.0308332}
+  m_LocalPosition: {x: 10.285793, y: 5.33, z: 6.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1955243208}
