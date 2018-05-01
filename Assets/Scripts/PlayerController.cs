@@ -16,8 +16,6 @@ public class PlayerController : MonoBehaviour
     public int playerNumber = 1;                //Stores player number for correct input.
     public float movementDamping = 0.1f;        //Smooths stick input.
     public float swingMultiplier = 5.0f;        //How fast can the player swing their sword?
-    public float legacySwordDamping = 0.2f;     //(LEGACY)Smooths sword movement.
-    public float legacySwingExtreme = 0.4f;     //(LEGACY)Angle limit for sword movement.
     public float swingExtreme = 200.0f;         //Angle limit for sword movement.
     public float modifierExtreme = 0.8f;        //Angle limit for grip modifier.
     public float recoilMultiplier = 10.0f;      //The force multiplier exerted on sword collisions.
@@ -34,6 +32,10 @@ public class PlayerController : MonoBehaviour
     public AudioSource footStepSourceR;         //The sound to play when a footstep is executed. (Right)
     public bool legacyMovement = false;         //Toggles between using linear interpolation or smoothDamp.
     public bool ikActive = true;                //Whether IK on the arms is enabled or not (for testing).
+
+    //LEGACY VARIABLES
+    public float legacySwordDamping = 0.2f;     //(LEGACY)Smooths sword movement.
+    public float legacySwingExtreme = 0.4f;     //(LEGACY)Angle limit for sword movement.
 
     //Private Variables.
     private float horizontalSword = 0;          //The value of armParent rotation across the horizontal axis.
@@ -222,7 +224,6 @@ public class PlayerController : MonoBehaviour
     //Detracts health from the playerHealth script and plays hit animation.
     public void Hurt(float damage, bool critical)
     {
-        
         //If the limb is a critical limb, it will deal more damage.
         if(critical)
         {
